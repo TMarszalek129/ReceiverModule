@@ -11,16 +11,23 @@ module TB();
    parameter BIT_ns  = (SIMUL_FREQ_Hz / BITRATE_bps)  ;
    parameter BIT_clk = CLK_Hz / BITRATE_bps;
 
+   reg clk; 
+//    int DATA [3] = {8'h1A, 8'h2B, 8'h30};
+//    int DATA [3] = {8'hA1, 8'hA3, 8'hA5};
+   int DATA [3] = {8'h5, 8'h8, 8'h11};
+   reg rx;
+   reg[8:0] data;
+   reg data_valid;
+
    // clock signal generation
-   reg clk;
    initial 
       forever begin
          clk = 0; #(CLK_PERIOD_ps/2);
          clk = 1; #(CLK_PERIOD_ps/2);
-      end   
-   
-   int DATA [5] = {8'hA1, 8'hA2, 8'hA3, 8'hA5, 8'hA6};
-   reg rx;
+		 if(data_valid == 1)
+					$display("DATA received: %02x", int'(data));  
+      end
+
    initial begin
 		#(BIT_ns);
 		for(int i = 0; i < $size(DATA); i++) begin
@@ -47,10 +54,14 @@ module TB();
 			end
 			
 			$display("DATA = %02x", DATA[i]);
-			$display("REAL LSB = %01x", DATA[i][0]);
 		end
 		$stop();
 	end
+
+
+
    UART_Rec uart_rec(.clk(clk), .rx(rx), .data(data), .data_valid(data_valid));
+
+   
    
 endmodule
