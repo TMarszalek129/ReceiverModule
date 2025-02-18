@@ -29,15 +29,11 @@ module UART_Rec(
 	if(rx == 0) begin
 		frame_ctr = frame_ctr + 1;
 		e_state = BUSY;
-        
-		// $display("Frame number: ", frame_ctr);
 		end
 	end
 
 	BUSY: begin
 		clock_ticks = clock_ticks + 1;
-        // data[clock_ticks] = rx;
-        // $display("Current bit: ", rx);
         if(clock_ticks % int'(BIT_clk) == 0) begin
             data[i] = rx;
             i = i + 1;

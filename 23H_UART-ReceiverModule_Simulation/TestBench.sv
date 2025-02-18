@@ -11,6 +11,7 @@ module TB();
    parameter BIT_ns  = (SIMUL_FREQ_Hz / BITRATE_bps)  ;
    parameter BIT_clk = CLK_Hz / BITRATE_bps;
 
+   // variables
    reg clk; 
 //    int DATA [3] = {8'h1A, 8'h2B, 8'h30};
 //    int DATA [3] = {8'hA1, 8'hA3, 8'hA5};
@@ -27,7 +28,7 @@ module TB();
 		 if(data_valid == 1)
 					$display("DATA received: %02x", int'(data));  
       end
-
+   // data sending
    initial begin
 		#(BIT_ns);
 		for(int i = 0; i < $size(DATA); i++) begin
@@ -57,8 +58,6 @@ module TB();
 		end
 		$stop();
 	end
-
-
 
    UART_Rec uart_rec(.clk(clk), .rx(rx), .data(data), .data_valid(data_valid));
 
