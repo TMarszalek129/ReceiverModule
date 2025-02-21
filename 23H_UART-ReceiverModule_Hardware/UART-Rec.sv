@@ -39,12 +39,11 @@ module UART_Rec(
             data[i] = rx;
             i = i + 1;
         end
-        if(clock_ticks == int'(9 * BIT_clk)) begin
+		if(clock_ticks == int'(15 * BIT_clk)) begin
             e_state = IDLE;
             clock_ticks = 0;
             data_valid = 1;
         end
-		
 	end
 	endcase
     rx_z1 = rx;

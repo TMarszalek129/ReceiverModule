@@ -28,6 +28,7 @@ module TB();
 		 if(data_valid == 1)
 					$display("DATA received: %02x", int'(data));  
       end
+	  
    // data sending
    initial begin
 		#(BIT_ns);
