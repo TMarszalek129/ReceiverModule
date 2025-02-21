@@ -5,17 +5,15 @@ module UART_Rec(
     output reg data_valid
 );
 
-   // independent parameters
-   parameter SIMUL_FREQ_Hz = 1_000_000_000.0;                                         
+   // independent parameters                                        
    parameter CLK_Hz        = 66_000_000.0; 
-   parameter BITRATE_bps   = 9_600.0;     
+   parameter BITRATE_bps   = 9_600.0;
+   parameter DELAY         = 1000;     
 
    // derived parameters
-   parameter CLK_PERIOD_ps = (SIMUL_FREQ_Hz / CLK_Hz);
-   parameter BIT_ns  = (SIMUL_FREQ_Hz / BITRATE_bps);
    parameter BIT_clk = CLK_Hz / BITRATE_bps;
 
-   enum {IDLE, BUSY} e_state = IDLE;
+   enum {IDLE, START, BUSY, STOP} e_state = IDLE;
    reg [3:0]  frame_ctr = 0;
    reg [20:0] clock_ticks = 0;
    int i = 0;
@@ -25,27 +23,50 @@ module UART_Rec(
 	case(e_state)
 
 	IDLE: begin
-    data_valid = 0;
     i = 0;
 	if(rx != rx_z1) begin
-		frame_ctr = frame_ctr + 1;
-		e_state = BUSY;
+		e_state = START;
+        frame_ctr = frame_ctr + 1;
+        clock_ticks = 0;
 		end
 	end
 
+    START: begin
+       clock_ticks = clock_ticks + 1;
+
+       if(clock_ticks == int'(BIT_clk)) begin
+            e_state = BUSY;
+            clock_ticks = 0;
+       end
+    end
+
 	BUSY: begin
 		clock_ticks = clock_ticks + 1;
-        if(clock_ticks % int'(BIT_clk) == 0) begin
+        
+        if(clock_ticks % int'(BIT_clk - DELAY) == 0) begin
             data[i] = rx;
             i = i + 1;
+            clock_ticks = 0;
         end
-        if(clock_ticks == int'(9 * BIT_clk)) begin
-            e_state = IDLE;
+
+        if(i == 8) begin
+            e_state = STOP;
             clock_ticks = 0;
             data_valid = 1;
         end
 		
 	end
+
+    STOP: begin
+        clock_ticks = clock_ticks + 1;
+        data_valid = 0;       
+
+        if(clock_ticks == int'(5 * BIT_clk)) begin
+            e_state = IDLE;
+            clock_ticks = 0;
+        end
+    end
+
 	endcase
     rx_z1 = rx;
    end

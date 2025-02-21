@@ -5,5 +5,9 @@ vsim -voptargs=+acc work.TB
 
 add wave -position insertpoint  sim:/uart_rec/clk
 add wave -position insertpoint  sim:/uart_rec/rx
+add wave -position insertpoint  sim:/uart_rec/e_state
+add wave -position insertpoint  sim:/TB/uart_rec/data
+add wave -position insertpoint  sim:/TB/uart_rec/i
 add wave -position insertpoint  sim:/TB/rx
 add wave -position insertpoint  sim:/TB/data_valid
+

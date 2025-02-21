@@ -7,9 +7,8 @@ module TB();
    parameter BITRATE_bps   = 9_600.0;     
 
    // derived parameters
-   parameter CLK_PERIOD_ps = (SIMUL_FREQ_Hz / CLK_Hz)  ;
-   parameter BIT_ns  = (SIMUL_FREQ_Hz / BITRATE_bps)  ;
-   parameter BIT_clk = CLK_Hz / BITRATE_bps;
+   parameter CLK_PERIOD_ps = (SIMUL_FREQ_Hz / CLK_Hz);
+   parameter BIT_ns  = (SIMUL_FREQ_Hz / BITRATE_bps);
 
    // variables
    reg clk; 
@@ -17,7 +16,7 @@ module TB();
 //    int DATA [3] = {8'hA1, 8'hA3, 8'hA5};
    int DATA [3] = {8'h5, 8'h8, 8'h11};
    reg rx;
-   reg[8:0] data;
+   reg[7:0] data;
    reg data_valid;
 
    // clock signal generation
