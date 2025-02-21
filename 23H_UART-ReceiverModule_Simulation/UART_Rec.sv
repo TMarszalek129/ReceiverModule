@@ -12,7 +12,7 @@ module UART_Rec(
    // derived parameters
    parameter BIT_clk = CLK_Hz / BITRATE_bps;
 
-   enum {IDLE, START, BUSY, STOP} e_state = IDLE;
+   enum {IDLE, START, DATA, STOP} e_state = IDLE;
    reg [3:0]  frame_ctr = 0;
    reg [20:0] clock_ticks = 0;
    int i = 0;
@@ -35,12 +35,12 @@ module UART_Rec(
        clock_ticks = clock_ticks + 1;
 
        if(clock_ticks == int'(BIT_clk)) begin
-            e_state = BUSY;
+            e_state = DATA;
             clock_ticks = 0;
        end
     end
 
-	BUSY: begin
+	DATA: begin
 		clock_ticks = clock_ticks + 1;
         
         if(clock_ticks == int'(0.5 * BIT_clk)) begin
