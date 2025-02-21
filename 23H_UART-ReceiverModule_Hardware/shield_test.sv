@@ -13,14 +13,15 @@ parameter BIT_ns        = SIMUL_FREQ_Hz / BOUD_RATE_bps;
 
 
 reg s_out_z1 = 0;
-reg [8:0] data = 0;
+reg [7:0] data = 0;
 reg data_valid = 0;
 
 reg s_out_sync; always @(posedge clk) s_out_sync = ~s_out;
 
-assign D = ~data[4:1];
+assign D = ~data[3:0];
+// assign D[1] = data_valid;
 
-assign dbg[2] = clk;
+assign dbg[2] = data[0];
 assign dbg[1] = s_out_sync;
 
 UART_Rec uart_rec(.clk(clk), .rx(s_out_sync), .data(data), .data_valid(data_valid));

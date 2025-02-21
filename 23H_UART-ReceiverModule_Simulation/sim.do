@@ -10,4 +10,6 @@ add wave -position insertpoint  sim:/TB/uart_rec/data
 add wave -position insertpoint  sim:/TB/uart_rec/i
 add wave -position insertpoint  sim:/TB/rx
 add wave -position insertpoint  sim:/TB/data_valid
+add wave -position insertpoint  sim:/TB/uart_rec/clock_ticks
+add wave -position insertpoint  sim:/TB/uart_rec/tick_tock
 
